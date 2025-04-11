@@ -1,0 +1,331 @@
+/* ======================= TOP LEFT ============================ */
+
+.adminDashboardContainer {
+    padding: 40px 20px;
+}
+
+.adminDashboardTop {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.adminTopLeft {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.adminDetailsTopCard {
+    /* display: flex; */
+    background-color: white;
+    /* margin: 10px; */
+    justify-content: space-between;
+    padding: 8px 15px;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.adminDetailsCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.adminProgessBar {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: 80% 20%;
+    gap: 1rem;
+    align-items: center;
+}
+
+.progress-bar {
+    background: #088586;
+}
+
+.progessDetails h2 {
+    font-size: 16px;
+    margin: 0;
+}
+
+.adminDetailsLeft h3, h1 {
+    margin: 0;
+}
+
+.adminDetailsLeft h3 {
+    font-weight: 200;
+    font-size: 12px;
+}
+
+.adminDetailsLeft h1 {
+    margin-top: 10px;
+    font-weight: 600;
+    font-size: 2rem;
+}
+
+.adminDetailsRight {
+    display: flex;
+    justify-content: center;
+    width: 23%;
+
+}
+
+.adminDetailsRight img {
+    width: 100%;
+}
+
+
+/* ======================== TOP RIGHT ============================= */
+
+
+.adminTopRight {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px 20px;
+} 
+
+.leaderBoard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.leaderBoardHeading button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #088586;
+    color: white;
+}
+
+.adminLeaderTable {
+    margin-top: 1rem;
+}
+
+.custom-table thead th {
+    background-color: #76b8ff38; 
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 400;
+  }
+  
+  .custom-table tbody td,
+  .custom-table tbody th {
+    text-align: center;
+    vertical-align: middle;
+    padding: 16px 12px; /* More space between rows and columns */
+    font-size: 15px;
+  }
+  
+  .custom-table {
+    border-collapse: separate;
+    border-spacing: 0 10px; /* vertical space between rows */
+  }
+
+  
+
+/* ========================= USER LIST TABLE =============================================   */
+  
+
+.adminDashBottomTable {
+    margin-top: 1rem;
+    background-color: white;
+    border-radius: 10px;
+    padding: 25px 25px;
+}
+
+.adminUserListHeading {
+    display: flex;
+    justify-content: space-between;
+}
+
+.adminUserListHeading h1 {
+    font-size: 24px;
+}
+
+.adminUserListHeading button {
+    border: none;
+    background-color: #088586;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.useTableSearch {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.search-box {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+}
+  
+.search-box .search-icon {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    color: #aaa;
+    font-size: 16px;
+}
+  
+.search-box input {
+    padding-left: 36px; /* space for icon */
+}
+  
+
+.userListFilter {
+    display: flex;
+    gap: 2rem;
+}
+
+.filter {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.filterheading h3{
+    font-size: 12px;
+    margin: 0;
+}
+.sortby {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.shortbyHeading h3 {
+    font-size: 12px;
+    margin: 0;
+}
+
+.shortByLogo {
+    display: flex;
+    gap: 5px;
+}
+
+.shortByLogo h3{
+    font-size: 12px;
+    margin: 0;
+    font-weight: 700;
+}
+
+
+
+/* ========================== USER TABLE =================================== */
+
+.userProgressTable {
+    margin-top: 2rem;
+}
+
+.custom-user-table thead th {
+    background-color: #f0f0f0; /* Light grey */
+    border-bottom: 4px solid #28a745; /* Green line */
+    vertical-align: middle;
+    font-weight: 500;
+  }
+  
+  .custom-user-table tbody tr {
+    height: 60px; /* Increase row height */
+  }
+  
+  .custom-user-table td,
+  .custom-user-table th {
+    vertical-align: middle;
+  }
+  
+
+
+.adminDashUserTablePage {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+}  
+
+.adminDashUserTableLeft h3 {
+    font-size: 16px;
+}
+
+.adminDashUserTableLeft span {
+    color: #088586;
+}
+
+/* Inner table styling */
+.inner-table {
+    border: none !important;
+    background-color: #aaa;
+  }
+  
+  .inner-table thead {
+    background-color: #088586 !important; /* Light green */
+    border-bottom: none !important;
+}
+
+.arrow-icon.rotate {
+    transform: rotate(180deg);
+  }
+
+.inner-table thead tr th {
+    border: none !important;
+    background-color: #088586 !important; /* Light green */
+    color: white;
+}
+
+.inner-table tbody tr td {
+    border: none !important;
+}
+
+.inner-table tbody tr {
+    border: none;
+}
+  
+  /* Optional: give the expanded row a little visual spacing */
+  .expanded-row td {
+    padding: 0 !important;
+    background: rgba(255, 255, 255, 0.785);
+  }
+  
+
+  .inner-table-wrapper {
+    max-height: 250px; /* You can adjust height as per design */
+    overflow-y: auto;
+  }
+  
+  /* Optional: remove borders if needed */
+  .inner-table thead.table-secondary {
+    background-color: #d4edda !important; /* Green-ish */
+    border-bottom: none;
+  }
+  
+  .inner-table th,
+  .inner-table td {
+    border: none !important;
+  }
+  
+
+/* ========================== PAINATION ==================================   */
+
+  .custom-pagination .page-item {
+    margin-right: 8px; /* space between page items */
+  }
+  
+  .custom-pagination .page-link {
+    color: #000;
+    border-radius: 6px;
+  }
+  
+  .custom-pagination .page-link.active {
+    background-color: #088586 !important; /* Green background */
+    border-color: #28a745;
+    color: white;
+  }
+  
+  .custom-pagination .page-item.disabled .page-link {
+    pointer-events: none;
+    color: #6c757d;
+  }
+  
