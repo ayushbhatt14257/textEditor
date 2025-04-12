@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useRef, useState, useMemo } from "react";
 import "./textEditor.css";
 import PageImg from "../../../assest/Rectangle.png";
+import JoditEditor from "jodit-react";
 
 const TextEditor = () => {
+  const editor = useRef(null);
+  const [content, setContent] = useState("");
+
+  //   const config = useMemo(() => ({
+  //     readonly: false, // all options from https://xdsoft.net/jodit/docs/,
+  //     placeholder: placeholder || 'Start typings...'
+  //   }),
+  //   [placeholder]
+  // );
+
   return (
     <div className="textEditorContainer">
       <div className="textEditorTop">
@@ -16,44 +27,66 @@ const TextEditor = () => {
         </div>
       </div>
 
-      <div className="image-and-textEditor">
+      <div className="textEditorMiddle">
         <div className="textEditorleftImg">
-          <div className="leftEditorTop">
-            <div className="edtiorTotalPage">
-              <h4>Total Page</h4>
-              <h4>50</h4>
+          <div className="middleLeft">
+            <div className="textEditorLeftFilter">
+              <h4>Filter</h4>
+              <i class="fa-solid fa-filter"></i>
             </div>
-            <div className="editorPages">
-              <h4>Pending Page</h4>
-              <h4 className="front">25</h4>
-            </div>
-            <div className="editorPages">
-              <h4>Completed Page</h4>
-              <h4 className="front2">25</h4>
+            <div className="leftEditorTop">
+              <div className="edtiorTotalPage">
+                <h4>Total Page</h4>
+                <h4>50</h4>
+              </div>
+              <div className="editorPages">
+                <h4>Pending Page</h4>
+                <h4 className="front">25</h4>
+              </div>
+              <div className="editorPages">
+                <h4>Completed Page</h4>
+                <h4 className="front2">25</h4>
+              </div>
             </div>
           </div>
 
-          <div className="textEditorLeftFilter">
-            <h4>Filter</h4>
-            <i class="fa-solid fa-filter"></i>
-          </div>
-
-          <div className="textEditorLeftPageListing">
-            <div className="imgListing">
-              <img src={PageImg} alt="" />
-              <h4>Page 1</h4>
-            </div>
-            <div className="imgListing">
-              <img src={PageImg} alt="" />
-              <h4>Page 1</h4>
-            </div>
-            <div className="imgListing">
-              <img src={PageImg} alt="" />
-              <h4>Page 1</h4>
+          <div className="middleRight">
+            <div className="scrollWrapper">
+              {" "}
+              {/* NEW wrapper */}
+              <div className="textEditorLeftPageListing">
+                <div className="imgListing">
+                  <img src={PageImg} alt="" />
+                  <h4>Page 1</h4>
+                </div>
+                <div className="imgListing">
+                  <img src={PageImg} alt="" />
+                  <h4>Page 1</h4>
+                </div>
+                <div className="imgListing">
+                  <img src={PageImg} alt="" />
+                  <h4>Page 1</h4>
+                </div>
+                <div className="imgListing">
+                  <img src={PageImg} alt="" />
+                  <h4>Page 1</h4>
+                </div>
+                <div className="imgListing">
+                  <img src={PageImg} alt="" />
+                  <h4>Page 1</h4>
+                </div>
+                <div className="imgListing">
+                  <img src={PageImg} alt="" />
+                  <h4>Page 1</h4>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
+      <div className="image-and-textEditor">
+        
         <div className="textEditorImgMiddle">
           <div className="middleTextEditorImg">
             <img src={PageImg} alt="" />
@@ -68,69 +101,19 @@ const TextEditor = () => {
         <div className="textEditorContentRight">
           <div className="editorContainer">
             <h4>Typography</h4>
-            {/* First Row: Typography controls */}
-            <div className="editorTopControls">
-              <div className="editorTypography">
-                    <select className="fullWidth">
-                        <option>Crimson Text</option>
-                        <option>Roboto</option>
-                        <option>Arial</option>
-                    </select>
-                    <select className="fullWidth">
-                        <option>Regular</option>
-                        <option>Bold</option>
-                        <option>Italic</option>
-                    </select>
-              </div>
 
-              {/* Second Row: Text formatting controls */}
-              <div className="editorFormattingRow">
-                <select className="fontSizeSelect">
-                  <option>14</option>
-                  <option>16</option>
-                  <option>18</option>
-                </select>
+            <JoditEditor
+              ref={editor}
+              value={content}
+              // config={config}
+              tabIndex={1} // tabIndex of textarea
+              onBlur={(newContent) => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
+              onChange={(newContent) => {}}
+              width='50%'
 
-                <div className="editorFormatting">
-                  <select className="fontSizeSelect">
-                    <option value="left">Left</option>
-                    <option value="right">Right</option>
-                    <option value="justify">Justify</option>
-                  </select>
-                </div>
-                <div className="editorFormatting2">
-                  <div className="bullet">
-                    <i class="fa-solid fa-list-ul"></i>
-                  </div>
-                  <div className="list">
-                    <i class="fa-solid fa-list-ol"></i>
-                  </div>
-                </div>
-                <div className="editorFormatting2">
-                    <div className="textStyle">
-                        <i class="fa-solid fa-bold"></i>
-                    </div>
-                    <div className="textStyle">
-                        <i class="fa-solid fa-italic"></i>
-                    </div>
-                    <div className="textStyle">
-                        <i class="fa-solid fa-underline"></i>
-                    </div>
-                    <div className="textStyle">
-                        <i class="fa-solid fa-strikethrough"></i>
-                    </div>
-                </div>
+            />
 
-                <div className="editorFormatting2">
-                  <div className="textclor">
-                    <i class="fa-solid fa-t"></i>
-                  </div>
-                  <div className="textColorBox">
-                    {/* <i class="fa-solid fa-list-ol"></i> */}
-                  </div>
-                </div>
-              </div>
-            </div>
+
 
             {/* Image Upload Section */}
             <div className="editorImageUpload">
@@ -141,10 +124,6 @@ const TextEditor = () => {
               <p className="formats">Supported formats: JPEG, PNG</p>
             </div>
 
-            {/* Text Area */}
-            <div className="editorTextArea">
-              <textarea placeholder="Start Typing or Speaking..."></textarea>
-            </div>
           </div>
           <div className="textEditorBtn">
             <button>Start Recording</button>
