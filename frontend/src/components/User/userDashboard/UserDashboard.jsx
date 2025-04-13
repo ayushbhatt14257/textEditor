@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./userDash.css";
 import completePage from "../../../assest/completedpage.png";
 import assignedPage from "../../../assest/assignedpage.png";
@@ -22,49 +22,60 @@ const UserDashboard = () => {
   const percentage = 66;
 
   const [openIndex, setOpenIndex] = useState(null);
+  const [userStats, setUserStats] = useState({});
+  const [pdfList, setPdfList] = useState([]);
+  const [leaderboard, setLeaderboard] = useState([]);
+  
 
   const toggleDetails = (index) => {
     setOpenIndex((prev) => (prev === index ? null : index));
   };
 
-  const pdfs = [
-    {
-      title: "Client_Proposal_April2025.pdf",
-      pageInfo: "120 Pages | 01:20:00",
-      percentage: 70,
-      logo: PngLogo,
-      completeImg: completeImg,
-    },
-    {
-      title: "Client_Proposal_April2025.pdf",
-      pageInfo: "120 Pages | 01:20:00",
-      percentage: 70,
-      logo: PngLogo,
-      completeImg: completeImg,
-    },
-    {
-      title: "Client_Proposal_April2025.pdf",
-      pageInfo: "120 Pages | 01:20:00",
-      percentage: 90,
-      logo: PngLogo,
-      completeImg: completeImg,
-    },
-    {
-      title: "Client_Proposal_April2025.pdf",
-      pageInfo: "120 Pages | 01:20:00",
-      percentage: 40,
-      logo: PngLogo,
-      completeImg: completeImg,
-    },
-    {
-      title: "Client_Proposal_April2025.pdf",
-      pageInfo: "120 Pages | 01:20:00",
-      percentage: 20,
-      logo: PngLogo,
-      completeImg: completeImg,
-    },
-    // more items
-  ];
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      const access_token = localStorage.getItem("access_token");
+      try {
+        const [statsRes, pdfRes, leaderboardRes] = await Promise.all([
+          fetch("http://51.20.246.38:5000/api/userdashboard", {
+            method: "GET",
+           // mode: 'no-cors',
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${access_token}`,
+            },
+          }),
+          fetch('http://51.20.246.38:5000/api/documentlist',{
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${access_token}`
+            }
+          }),
+          fetch("http://51.20.246.38:5000/api/top_users", {
+            method: "GET",
+          //  mode: 'no-cors',
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${access_token}`,
+            },
+          }),
+        ]);
+  
+        const [stats,pdf, leaderboard] = await Promise.all([
+          statsRes.json(),
+          pdfRes.json(),
+          leaderboardRes.json(),
+        ]);
+  
+        setUserStats(stats);
+        setPdfList(pdf);
+        setLeaderboard(leaderboard);
+      } catch (err) {
+        console.error("Dashboard data fetch failed", err);
+      }
+    };
+    fetchDashboardData();
+  }, []);
 
   const data = [
     { day: "Mon", value: 5 },
@@ -82,8 +93,8 @@ const UserDashboard = () => {
         <div className="topUserCards">
           <div className="userDetailsTopCard">
             <div className="adminDetailsLeft">
-              <h3>Total Users</h3>
-              <h1>1213</h1>
+              <h3>Total Pages Completed</h3>
+              <h1>{userStats.pages_completed}</h1>
             </div>
 
             <div className="adminDetailsRight">
@@ -92,8 +103,8 @@ const UserDashboard = () => {
           </div>
           <div className="userDetailsTopCard">
             <div className="adminDetailsLeft">
-              <h3>Total Users</h3>
-              <h1>1213</h1>
+              <h3>Total Pages Assigned</h3>
+              <h1>{userStats.total_pages}</h1>
             </div>
 
             <div className="adminDetailsRight">
@@ -102,8 +113,8 @@ const UserDashboard = () => {
           </div>
           <div className="userDetailsTopCard">
             <div className="adminDetailsLeft">
-              <h3>Total Users</h3>
-              <h1>1213</h1>
+              <h3>Total Pages Left</h3>
+              <h1>{userStats.pages_left}</h1>
             </div>
 
             <div className="adminDetailsRight">
@@ -112,8 +123,8 @@ const UserDashboard = () => {
           </div>
           <div className="userDetailsTopCard">
             <div className="adminDetailsLeft">
-              <h3>Total Users</h3>
-              <h1>1213</h1>
+              <h3>Total Time Taken</h3>
+              <h1>{userStats.total_transcription_time}</h1>
             </div>
 
             <div className="adminDetailsRight">
@@ -127,173 +138,16 @@ const UserDashboard = () => {
         <div className="recentPdfListing">
           <div className="recentPdfHeading">
             <div className="pdfHeadingText">
-              <h1>RECENT PDF LISTING(10)</h1>
+              <h1>{`RECENT PDF LISTING(${pdfList[0]?.pdf_info.length})`}</h1>
             </div>
             <div className="pdfHeadingBtn">
               <button>View All</button>
             </div>
           </div>
 
-          {/* <div className="pdfListingMain">
-            <div className="pdfListingCard">
-              <div className="pdfListingLeftarrow">
-                <i class="fa-solid fa-angle-down"></i>
-              </div>
-              <div className="pdfLogo">
-                <img src={PngLogo} alt="" />
-              </div>
-              <div className="pdfClientProposal">
-                <div className="clientProposalHeading">
-                  <h1>Client_Proposal_April2025.pdf</h1>
-                </div>
-                <div className="pdfListingPages">
-                  <div className="pdfPageCount">
-                    <h4>120 Pages | 01:20:00</h4>
-                  </div>
-                </div>
-              </div>
-              <div className="userDashProgessBar">
-                <CircularProgressbar value={percentage} text={`${percentage}%`} />
-              </div>
-            </div>
-
-            <div className="userpdfListCompleteDetails">
-
-              <div className="userPdfupperPages">
-                <div className="upperPagesLeft">
-                  <div className="numberpageComplete">
-                    <h3>25</h3>
-                  </div>
-                  <div className="pagesCompletedText">
-                    <h3>Completed Pages</h3>
-                  </div>
-                </div>
-
-                <div className="pagesCompletedImage">
-                  <div className="comImg">
-                    <img src={completeImg} alt="" />
-                  </div>
-                  <div className="comImg">
-                    <img src={completeImg} alt="" />
-                  </div>
-                  <div className="comImg">
-                    <img src={completeImg} alt="" />
-                  </div>
-                  <div className="comImg">
-                    <img src={completeImg} alt="" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="userPdfupperPages">
-                <div className="upperPagesLeft">
-                  <div className="numberpageComplete">
-                    <h3>25</h3>
-                  </div>
-                  <div className="pagesCompletedText">
-                    <h3>Completed Pages</h3>
-                  </div>
-                </div>
-
-                <div className="pagesCompletedImage">
-                  <div className="comImg">
-                    <img src={completeImg} alt="" />
-                  </div>
-                  <div className="comImg">
-                    <img src={completeImg} alt="" />
-                  </div>
-                  <div className="comImg">
-                    <img src={completeImg} alt="" />
-                  </div>
-                  <div className="comImg">
-                    <img src={completeImg} alt="" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="pdfListingMain">
-            <div className="pdfListingCard">
-              <div className="pdfListingLeftarrow">
-                <i class="fa-solid fa-angle-down"></i>
-              </div>
-              <div className="pdfLogo">
-                <img src={PngLogo} alt="" />
-              </div>
-              <div className="pdfClientProposal">
-                <div className="clientProposalHeading">
-                  <h1>Client_Proposal_April2025.pdf</h1>
-                </div>
-                <div className="pdfListingPages">
-                  <div className="pdfPageCount">
-                    <h4>120 Pages | 01:20:00</h4>
-                  </div>
-                </div>
-              </div>
-              <div className="userDashProgessBar">
-                <CircularProgressbar value={percentage} text={`${percentage}%`} />
-              </div>
-            </div>
-
-            <div className="userpdfListCompleteDetails">
-
-              <div className="userPdfupperPages">
-                <div className="upperPagesLeft">
-                  <div className="numberpageComplete">
-                    <h3>25</h3>
-                  </div>
-                  <div className="pagesCompletedText">
-                    <h3>Completed Pages</h3>
-                  </div>
-                </div>
-
-                <div className="pagesCompletedImage">
-                  <div className="comImg">
-                    <img src={completeImg} alt="" />
-                  </div>
-                  <div className="comImg">
-                    <img src={completeImg} alt="" />
-                  </div>
-                  <div className="comImg">
-                    <img src={completeImg} alt="" />
-                  </div>
-                  <div className="comImg">
-                    <img src={completeImg} alt="" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="userPdfupperPages">
-                <div className="upperPagesLeft">
-                  <div className="numberpageComplete">
-                    <h3>25</h3>
-                  </div>
-                  <div className="pagesCompletedText">
-                    <h3>Completed Pages</h3>
-                  </div>
-                </div>
-
-                <div className="pagesCompletedImage">
-                  <div className="comImg">
-                    <img src={completeImg} alt="" />
-                  </div>
-                  <div className="comImg">
-                    <img src={completeImg} alt="" />
-                  </div>
-                  <div className="comImg">
-                    <img src={completeImg} alt="" />
-                  </div>
-                  <div className="comImg">
-                    <img src={completeImg} alt="" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> */}
-
           <div>
-            {pdfs.map((pdf, index) => (
+            {Array.isArray(pdfList[0]?.pdf_info) && pdfList[0]?.pdf_info?.map((pdf, index) => (
+              
               <div className="pdfListingMain" key={index}>
                 <div
                   className="pdfListingCard"
@@ -307,22 +161,22 @@ const UserDashboard = () => {
                     ></i>
                   </div>
                   <div className="pdfLogo">
-                    <img src={pdf.logo} alt="" />
+                    <img src={PngLogo} alt="" />
                   </div>
                   <div className="pdfClientProposal">
                     <div className="clientProposalHeading">
-                      <h1>{pdf.title}</h1>
+                      <h1>{pdf.document_name}</h1>
                     </div>
                     <div className="pdfListingPages">
                       <div className="pdfPageCount">
-                        <h4>{pdf.pageInfo}</h4>
+                        <h4>{`${pdf.pages_info?.length} pages assigned`}</h4>
                       </div>
                     </div>
                   </div>
                   <div className="userDashProgessBar">
                     <CircularProgressbar
-                      value={pdf.percentage}
-                      text={`${pdf.percentage}%`}
+                      value={(pdf.pages_completed/ pdf.pages_left)/100}
+                      text={`${(pdf.pages_completed/ pdf.pages_left)/100}%`}
                     />
                   </div>
                 </div>
@@ -333,16 +187,20 @@ const UserDashboard = () => {
                       <div className="userPdfupperPages" key={i}>
                         <div className="upperPagesLeft">
                           <div className="numberpageComplete">
-                            <h3>25</h3>
+                            <h3>{i === 0 ? pdf?.pages_info?.filter(page => page.page_s3_url !== null).length : pdf?.pages_info?.filter(page => page.transcripted_pdf_s3 !== null).length}</h3>
                           </div>
                           <div className="pagesCompletedText">
-                            <h3>Completed Pages</h3>
+                            <h3>{i === 0 ? 'Completed Pages' : 'Pending Pages'}</h3>
                           </div>
                         </div>
                         <div className="pagesCompletedImage">
-                          {[...Array(4)].map((_, j) => (
+                          {i === 0 ? pdf?.pages_info?.map((_, j) => (
                             <div className="comImg" key={j}>
-                              <img src={pdf.completeImg} alt="" />
+                              <img src={_.page_s3_url} alt="" />
+                            </div>
+                          )) : pdf?.pages_info?.map((_, j) => (
+                            <div className="comImg" key={j}>
+                              <img src={_.transcripted_pdf_s3} alt="" />
                             </div>
                           ))}
                         </div>
@@ -354,7 +212,6 @@ const UserDashboard = () => {
             ))}
           </div>
         </div>
-
         <div className="leaderBoard-and-graph">
           <div className="userDashLeaderBoard">
             <div className="adminTopRight">
@@ -380,34 +237,15 @@ const UserDashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="highlight-row">
-                      <th scope="row">25</th>
-                      <td>You</td>
-                      <td>25</td>
-                      <td>120hr 35min</td>
-                      <td>1224</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">1</th>
-                      <td>Mark</td>
-                      <td>25</td>
-                      <td>120hr 35min</td>
-                      <td>1224</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>Jacob</td>
-                      <td>25</td>
-                      <td>120hr 35min</td>
-                      <td>1224</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">3</th>
-                      <td>John</td>
-                      <td>25</td>
-                      <td>120hr 35min</td>
-                      <td>1224</td>
-                    </tr>
+                    {leaderboard.map((user, index) => (
+                      <tr key={index}>
+                        <th scope="row">{user.rank}</th>
+                        <td>{user.username}</td>
+                        <td>{user.total_pages - user.pending_pages}</td>
+                        <td>{user.total_time}</td>
+                        <td>{user.completed_pages}</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>

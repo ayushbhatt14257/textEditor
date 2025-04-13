@@ -70,7 +70,9 @@ const AdminLayout = () => {
             </div>
           </div>
         </div>
-        {showModal && <PdfUploadModal onClose={handleCloseModal} />}
+        {/* {showModal && <PdfUploadModal onClose={handleCloseModal} />} */}
+      <PdfUploadModal isOpen={showModal} onClose={handleCloseModal} />
+
       {/* </div> */}
     </>
   );

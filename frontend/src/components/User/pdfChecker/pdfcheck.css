@@ -1,0 +1,63 @@
+.pdfCheckContainer {
+    padding: 10px 20px;
+
+}
+
+.pdfCheckPagesDetails {
+    display: flex;
+    justify-content: space-between;
+}
+
+.pdfCheckPagesDetailsLeft {
+    display: flex;
+    gap: 1rem;
+
+}
+
+.pdfCheckTotalPage {
+    display: flex;
+    gap: 2px;
+}
+.pdfCheckTotalPage h3 {
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.pdfCheckTotalPage h2 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.mainCheckContainer {
+    background-color: rgba(0, 0, 0, 0.044);
+}
+
+.checkContainer {
+    padding: 10px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.checkContainerCard {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.checkerpagetext{
+    margin-top: 1rem;
+}
+
+.checkerpagetext h4 {
+    font-size: 12px;
+    font-weight: 400;
+}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./adminDash.css";
 import PeopleGroup from "../../../assest/group.png";
 import assignedPage from "../../../assest/assignedpage.png";
@@ -9,88 +9,98 @@ import pendingPage from "../../../assest/pendingpage.png";
 import CreateUserModal from "../../modal/createUserModal/CreateUserModal";
 
 const Dashboard = () => {
-  const [rotatedRow, setRotatedRow] = useState(null);
+  // Data Binding ========================================
+
+  const [adminStat, setAdminStat] = useState({});
+  const [userStat, setUserStat] = useState([]);
+  const [userList, setUserList] = useState([]);
+
+  console.log(adminStat);
+  console.log(userStat);
+  console.log(userList);
+
+  // pagination ===============================
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 20;
+
+  const totalUsers = userList.length;
+  const totalPages = Math.ceil(totalUsers / usersPerPage);
+
+  const startIndex = (currentPage - 1) * usersPerPage + 1;
+  const endIndex = Math.min(startIndex + usersPerPage - 1, totalUsers);
+
+  const visibleUsers = userList.slice(startIndex - 1, endIndex);
+
+  //  table toggle ===================================
+
   const [expandedRow, setExpandedRow] = useState(null);
-
-
-  const [showModal, setShowModal] = useState(false);
-
-const handleOpenModal = () => setShowModal(true);
-const handleCloseModal = () => setShowModal(false);
-
-
-  // const handleToggle = (index) => {
-  //   setRotatedRow(rotatedRow === index ? null : index);
-  // };
-
-  const tableData = [
-    {
-      name: "Mark",
-      assigned: 120,
-      completed: 100,
-      time: "110hr",
-      avg: "1.1 min",
-      pending: 20,
-      pdf: "Yes",
-    },
-    {
-      name: "Jacob",
-      assigned: 90,
-      completed: 75,
-      time: "80hr",
-      avg: "1.2 min",
-      pending: 15,
-      pdf: "No",
-    },
-    {
-      name: "John",
-      assigned: 100,
-      completed: 95,
-      time: "95hr",
-      avg: "1.0 min",
-      pending: 5,
-      pdf: "Yes",
-    },
-  ];
-
-  const sampleDetails = [
-    {
-      pdf: "client_proposal_april2025.pdf",
-      page: "12",
-      start: "10:00AM",
-      end: "11:00AM",
-      taken: "1 hr",
-      recording: "View",
-    },
-    {
-      pdf: "client_proposal_april2025.pdf",
-      page: "13",
-      start: "11:00AM",
-      end: "12:00PM",
-      taken: "1 hr",
-      recording: "View",
-    },
-    {
-      pdf: "client_proposal_april2025.pdf",
-      page: "13",
-      start: "11:00AM",
-      end: "12:00PM",
-      taken: "1 hr",
-      recording: "View",
-    },
-    {
-      pdf: "client_proposal_april2025.pdf",
-      page: "13",
-      start: "11:00AM",
-      end: "12:00PM",
-      taken: "1 hr",
-      recording: "View",
-    },
-  ];
 
   const handleToggleTalbe = (index) => {
     setExpandedRow(expandedRow === index ? null : index);
   };
+
+  // create user popup Modal=========================
+  const [showModal, setShowModal] = useState(false);
+
+  const handleOpenModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
+
+  const formatTime = (minutes) => {
+    const hrs = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hrs}hr ${mins}min`;
+  };
+
+  // api Fetch=================
+
+  useEffect(() => {
+    const fetchAdminDashboardData = async () => {
+      const access_token = localStorage.getItem("access_token");
+      try {
+        const [adminStatRes, userStatRes, userListRes] = await Promise.all([
+          fetch("http://51.20.246.38:5000/api/admindashboard", {
+            method: "GET",
+            // mode: 'no-cors',
+
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${access_token}`,
+            },
+          }),
+          fetch("http://51.20.246.38:5000/api/top_users", {
+            method: "GET",
+            // mode: 'no-cors',
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${access_token}`,
+            },
+          }),
+          fetch("http://51.20.246.38:5000/api/userlist", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${access_token}`,
+            },
+          }),
+        ]);
+
+        const [admin, user, uList] = await Promise.all([
+          adminStatRes.json(),
+          userStatRes.json(),
+          userListRes.json(),
+        ]);
+
+        setAdminStat(admin);
+        setUserStat(user);
+        setUserList(uList);
+      } catch (error) {
+        console.log("Admin DashBoard Data Fetch Failed", error);
+      }
+    };
+
+    fetchAdminDashboardData();
+  }, []);
 
   return (
     <>
@@ -102,7 +112,7 @@ const handleCloseModal = () => setShowModal(false);
               <div className="adminDetailsCard">
                 <div className="adminDetailsLeft">
                   <h3>Total Users</h3>
-                  <h1>1213</h1>
+                  <h1>{adminStat.total_users}</h1>
                 </div>
 
                 <div className="adminDetailsRight">
@@ -132,7 +142,7 @@ const handleCloseModal = () => setShowModal(false);
               <div className="adminDetailsCard">
                 <div className="adminDetailsLeft">
                   <h3>Total Pages Assigned</h3>
-                  <h1>1213</h1>
+                  <h1>{adminStat.total_pages}</h1>
                 </div>
 
                 <div className="adminDetailsRight">
@@ -161,7 +171,7 @@ const handleCloseModal = () => setShowModal(false);
               <div className="adminDetailsCard">
                 <div className="adminDetailsLeft">
                   <h3>Total Pages Completed</h3>
-                  <h1>1213</h1>
+                  <h1>{adminStat.pages_completed}</h1>
                 </div>
 
                 <div className="adminDetailsRight">
@@ -190,7 +200,7 @@ const handleCloseModal = () => setShowModal(false);
               <div className="adminDetailsCard">
                 <div className="adminDetailsLeft">
                   <h3>Total Time Taken</h3>
-                  <h1>1213</h1>
+                  <h1>{adminStat.total_transcription_time}</h1>
                 </div>
 
                 <div className="adminDetailsRight">
@@ -248,7 +258,7 @@ const handleCloseModal = () => setShowModal(false);
               <div className="adminDetailsCard">
                 <div className="adminDetailsLeft">
                   <h3>Pending Pages</h3>
-                  <h1>1213</h1>
+                  <h1>{adminStat.pages_left}</h1>
                 </div>
 
                 <div className="adminDetailsRight">
@@ -286,7 +296,7 @@ const handleCloseModal = () => setShowModal(false);
             </div>
 
             <div className="adminLeaderTable">
-              <table class="table custom-table">
+              <table className="table custom-table">
                 <thead>
                   <tr>
                     <th scope="col">Rank</th>
@@ -297,27 +307,16 @@ const handleCloseModal = () => setShowModal(false);
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>25</td>
-                    <td>120hr 35min</td>
-                    <td>1224</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>25</td>
-                    <td>120hr 35min</td>
-                    <td>1224</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>John</td>
-                    <td>25</td>
-                    <td>120hr 35min</td>
-                    <td>1224</td>
-                  </tr>
+                  {userStat.map((data, index) => (
+                    <tr key={index}>
+                      <th scope="row">{index + 1}</th>{}
+                      {/* Rank based on index */}
+                      <td>{data.username}</td>
+                      <td>{data.completed_pages}</td>
+                      <td>{data.total_time}</td>
+                      <td>{data.total_pages - data.pending_pages}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -379,75 +378,78 @@ const handleCloseModal = () => setShowModal(false);
                 </tr>
               </thead>
               <tbody>
-                {tableData.map((user, index) => (
-                  <React.Fragment key={index}>
-                    <tr
-                      onClick={() => handleToggleTalbe(index)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <th scope="row">
-                        <div className="d-flex align-items-center justify-content-center gap-2 position-relative">
-                          <input type="checkbox" />
-                          <i
-                            className={`fa-solid fa-caret-down arrow-icon ${
-                              expandedRow === index ? "rotate" : ""
-                            }`}
-                          ></i>
-                          <span>{user.name}</span>
-                        </div>
-                      </th>
-                      <td>{user.assigned}</td>
-                      <td>{user.completed}</td>
-                      <td>{user.time}</td>
-                      <td>{user.avg}</td>
-                      <td>{user.pending}</td>
-                      <td>{user.pdf}</td>
-                    </tr>
+                {visibleUsers.map((user, index) => {
+                  const globalIndex = (currentPage - 1) * usersPerPage + index;
 
-                    {expandedRow === index && (
-  <tr className="expanded-row inner-table">
-    <td colSpan="7">
-      <div className="inner-table-wrapper">
-        <table className="table table-bordered inner-table mb-0">
-          <thead className="table-secondary">
-            <tr>
-              <th>PDF</th>
-              <th>Page Name</th>
-              <th>Start Time</th>
-              <th>End Time</th>
-              <th>Time Taken</th>
-              <th>Recording</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sampleDetails.map((detail, idx) => (
-              <tr key={idx}>
-                <td>{detail.pdf}</td>
-                <td>{detail.page}</td>
-                <td>{detail.start}</td>
-                <td>{detail.end}</td>
-                <td>{detail.taken}</td>
-                <td>
-                  <button className="btn btn-sm btn-outline-primary">
-                    View
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </td>
-  </tr>
-)}
+                  return (
+                    <React.Fragment key={globalIndex}>
+                      <tr
+                        onClick={() => handleToggleTalbe(globalIndex)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <th scope="row">
+                          <div className="d-flex align-items-center justify-content-center gap-2 position-relative">
+                            <input type="checkbox" />
+                            <i
+                              className={`fa-solid fa-caret-down arrow-icon ${
+                                expandedRow === globalIndex ? "rotate" : ""
+                              }`}
+                            ></i>
+                            <span>{user.username}</span>
+                          </div>
+                        </th>
+                        <td>{user.pages_assigned}</td>
+                        <td>{user.pages_completed}</td>
+                        <td>{user.time_taken}</td>
+                        <td>{user.avg_time_per_page}</td>
+                        <td>{user.pending_pages}</td>
+                        <td>{user.pdf}</td>
+                      </tr>
 
-                  </React.Fragment>
-                ))}
+                      {expandedRow === globalIndex && (
+                        <tr className="expanded-row inner-table">
+                          <td colSpan="7">
+                            <div className="inner-table-wrapper">
+                              <table className="table table-bordered inner-table mb-0">
+                                <thead className="table-secondary">
+                                  <tr>
+                                    <th>PDF</th>
+                                    <th>Page Name</th>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
+                                    <th>Time Taken</th>
+                                    <th>Recording</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {user.pdf_info.map((pdf, idx) => (
+                                    <tr key={idx}>
+                                      <td>{pdf.document_name}</td>
+                                      <td>{pdf.pages_left}</td>
+                                      <td>-</td>
+                                      <td>-</td>
+                                      <td>{pdf.total_time}</td>
+                                      <td>
+                                        <button className="btn btn-sm btn-outline-primary">
+                                          View
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
+                  );
+                })}
               </tbody>
             </table>
           </div>
 
-          <div className="adminDashUserTablePage">
+          {/* <div className="adminDashUserTablePage">
             <div className="adminDashUserTableLeft">
               <h3>
                 Showing<span> 1-20</span> of<span> 124</span> Result
@@ -504,14 +506,100 @@ const handleCloseModal = () => setShowModal(false);
                 </ul>
               </nav>
             </div>
+          </div> */}
+          <div className="adminDashUserTablePage">
+            <div className="adminDashUserTableLeft">
+              <h3>
+                Showing
+                <span>
+                  {" "}
+                  {startIndex}-{endIndex}
+                </span>{" "}
+                of
+                <span> {totalUsers}</span> Result
+              </h3>
+            </div>
+
+            <div className="admiDashUserTableRight">
+              <nav aria-label="Page navigation example">
+                <ul className="pagination custom-pagination">
+                  {/* Previous */}
+                  <li
+                    className={`page-item ${
+                      currentPage === 1 ? "disabled" : ""
+                    }`}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.max(prev - 1, 1))
+                      }
+                      aria-label="Previous"
+                    >
+                      <span aria-hidden="true">&laquo;</span>
+                    </button>
+                  </li>
+
+                  {/* Dynamic Page Numbers */}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .slice(0, 5) // show first 5 pages (you can make this smarter)
+                    .map((page) => (
+                      <li
+                        key={page}
+                        className={`page-item ${
+                          currentPage === page ? "active" : ""
+                        }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() => setCurrentPage(page)}
+                        >
+                          {page}
+                        </button>
+                      </li>
+                    ))}
+
+                  {totalPages > 5 && (
+                    <>
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                      <li className="page-item">
+                        <button
+                          className="page-link"
+                          onClick={() => setCurrentPage(totalPages)}
+                        >
+                          {totalPages}
+                        </button>
+                      </li>
+                    </>
+                  )}
+
+                  {/* Next */}
+                  <li
+                    className={`page-item ${
+                      currentPage === totalPages ? "disabled" : ""
+                    }`}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                      }
+                      aria-label="Next"
+                    >
+                      <span aria-hidden="true">&raquo;</span>
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+            </div>
           </div>
         </div>
       </div>
       {/* </div> */}
-      {/* <CreateUserModal isOpen={showModal} onClose={handleCloseModal} /> */}
-      {showModal && <CreateUserModal onClose={handleCloseModal} />}
-
-
+      {/* {showModal && <CreateUserModal onClose={handleCloseModal} />} */}
+      <CreateUserModal isOpen={showModal} onClose={handleCloseModal} />
     </>
   );
 };
