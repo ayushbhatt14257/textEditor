@@ -1,6 +1,6 @@
 import React from "react";
 import "./pdfcheck.css";
-import pdfImg from "../../../assest/Rectangle.png"
+import pdfImg from "../../../assest/Rectangle.png";
 
 const PdfCheck = () => {
   return (
@@ -46,114 +46,158 @@ const PdfCheck = () => {
           </div>
         </div>
 
-
         <div className="mainCheckContainer">
-            <div className="checkContainer">
-                <div className="checkContainerCard">
-                    <div className="ceckerCheckbox">
+          <div className="status">
 
-                    </div>
-
-                    <div className="checkerPdfImg">
-                        <img src={pdfImg} alt="" />
-                    </div>
-
-                    <div className="checkerpagetext">
-                        <h4>Page1</h4>
-                    </div>
-                </div>
-                <div className="checkContainerCard">
-                    <div className="ceckerCheckbox">
-
-                    </div>
-
-                    <div className="checkerPdfImg">
-                        <img src={pdfImg} alt="" />
-                    </div>
-
-                    <div className="checkerpagetext">
-                        <h4>Page1</h4>
-                    </div>
-                </div>
-                <div className="checkContainerCard">
-                    <div className="ceckerCheckbox">
-
-                    </div>
-
-                    <div className="checkerPdfImg">
-                        <img src={pdfImg} alt="" />
-                    </div>
-
-                    <div className="checkerpagetext">
-                        <h4>Page1</h4>
-                    </div>
-                </div>
-                <div className="checkContainerCard">
-                    <div className="ceckerCheckbox">
-
-                    </div>
-
-                    <div className="checkerPdfImg">
-                        <img src={pdfImg} alt="" />
-                    </div>
-
-                    <div className="checkerpagetext">
-                        <h4>Page1</h4>
-                    </div>
-                </div>
-                <div className="checkContainerCard">
-                    <div className="ceckerCheckbox">
-
-                    </div>
-
-                    <div className="checkerPdfImg">
-                        <img src={pdfImg} alt="" />
-                    </div>
-
-                    <div className="checkerpagetext">
-                        <h4>Page1</h4>
-                    </div>
-                </div>
-                <div className="checkContainerCard">
-                    <div className="ceckerCheckbox">
-
-                    </div>
-
-                    <div className="checkerPdfImg">
-                        <img src={pdfImg} alt="" />
-                    </div>
-
-                    <div className="checkerpagetext">
-                        <h4>Page1</h4>
-                    </div>
-                </div>
-                <div className="checkContainerCard">
-                    <div className="ceckerCheckbox">
-
-                    </div>
-
-                    <div className="checkerPdfImg">
-                        <img src={pdfImg} alt="" />
-                    </div>
-
-                    <div className="checkerpagetext">
-                        <h4>Page1</h4>
-                    </div>
-                </div>
-                <div className="checkContainerCard">
-                    <div className="ceckerCheckbox">
-
-                    </div>
-
-                    <div className="checkerPdfImg">
-                        <img src={pdfImg} alt="" />
-                    </div>
-
-                    <div className="checkerpagetext">
-                        <h4>Page1</h4>
-                    </div>
-                </div>
+            <div className="ceckerCheckbox">
+              <div className="openo">
+                <span className="online"></span>
+              </div>
+              <h2>Completed</h2>
             </div>
+            <div className="ceckerCheckbox">
+              <div className="offlineo">
+                <span className="offline"></span>
+              </div>
+                  <h2>Pending</h2>
+            </div>
+          </div>
+          <div className="checkContainer">
+            <div className="checkContainerCard">
+              <div className="ceckerCheckbox">
+                <div className="open">
+                  <span className="online"></span>
+                </div>
+              </div>
+
+              <div className="checkerPdfImg">
+                <img src={pdfImg} alt="" />
+              </div>
+
+              <div className="checkerpagetext">
+                <h4>Page1</h4>
+              </div>
+            </div>
+            <div className="checkContainerCard">
+              <div className="ceckerCheckbox">
+                <div className="ceckerCheckbox">
+                  <div className="offline">
+                    <span className="offline"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="checkerPdfImg">
+                <img src={pdfImg} alt="" />
+              </div>
+
+              <div className="checkerpagetext">
+                <h4>Page1</h4>
+              </div>
+            </div>
+            <div className="checkContainerCard">
+              <div className="ceckerCheckbox">
+                <div className="ceckerCheckbox">
+                  <div className="open">
+                    <span className="online"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="checkerPdfImg">
+                <img src={pdfImg} alt="" />
+              </div>
+
+              <div className="checkerpagetext">
+                <h4>Page1</h4>
+              </div>
+            </div>
+            <div className="checkContainerCard">
+              <div className="ceckerCheckbox">
+                <div className="ceckerCheckbox">
+                  <div className="offline">
+                    <span className="online"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="checkerPdfImg">
+                <img src={pdfImg} alt="" />
+              </div>
+
+              <div className="checkerpagetext">
+                <h4>Page1</h4>
+              </div>
+            </div>
+            <div className="checkContainerCard">
+              <div className="ceckerCheckbox">
+                <div className="ceckerCheckbox">
+                  <div className="offline">
+                    <span className="offline"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="checkerPdfImg">
+                <img src={pdfImg} alt="" />
+              </div>
+
+              <div className="checkerpagetext">
+                <h4>Page1</h4>
+              </div>
+            </div>
+            <div className="checkContainerCard">
+              <div className="ceckerCheckbox">
+                <div className="ceckerCheckbox">
+                  <div className="offline">
+                    <span className="online"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="checkerPdfImg">
+                <img src={pdfImg} alt="" />
+              </div>
+
+              <div className="checkerpagetext">
+                <h4>Page1</h4>
+              </div>
+            </div>
+            <div className="checkContainerCard">
+              <div className="ceckerCheckbox">
+                <div className="ceckerCheckbox">
+                  <div className="open">
+                    <span className="online"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="checkerPdfImg">
+                <img src={pdfImg} alt="" />
+              </div>
+
+              <div className="checkerpagetext">
+                <h4>Page1</h4>
+              </div>
+            </div>
+            <div className="checkContainerCard">
+              <div className="ceckerCheckbox">
+                <div className="ceckerCheckbox">
+                  <div className="offline">
+                    <span className="offline"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="checkerPdfImg">
+                <img src={pdfImg} alt="" />
+              </div>
+
+              <div className="checkerpagetext">
+                <h4>Page1</h4>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>

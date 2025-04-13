@@ -7,8 +7,13 @@ import timeTaken from "../../../assest/timetaken.png";
 import totalRecording from "../../../assest/totalrecording.png";
 import pendingPage from "../../../assest/pendingpage.png";
 import CreateUserModal from "../../modal/createUserModal/CreateUserModal";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true); // initially loading
+
+
   // Data Binding ========================================
 
   const [adminStat, setAdminStat] = useState({});
@@ -54,15 +59,63 @@ const Dashboard = () => {
 
   // api Fetch=================
 
+  // useEffect(() => {
+  //   const fetchAdminDashboardData = async () => {
+  //     const access_token = localStorage.getItem("access_token");
+  //     try {
+  //       const [adminStatRes, userStatRes, userListRes] = await Promise.all([
+  //         fetch("http://51.20.246.38:5000/api/admindashboard", {
+  //           method: "GET",
+  //           // mode: 'no-cors',
+
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             Authorization: `Bearer ${access_token}`,
+  //           },
+  //         }),
+  //         fetch("http://51.20.246.38:5000/api/top_users", {
+  //           method: "GET",
+  //           // mode: 'no-cors',
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             Authorization: `Bearer ${access_token}`,
+  //           },
+  //         }),
+  //         fetch("http://51.20.246.38:5000/api/userlist", {
+  //           method: "GET",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             Authorization: `Bearer ${access_token}`,
+  //           },
+  //         }),
+  //       ]);
+
+  //       const [admin, user, uList] = await Promise.all([
+  //         adminStatRes.json(),
+  //         userStatRes.json(),
+  //         userListRes.json(),
+  //       ]);
+
+  //       setAdminStat(admin);
+  //       setUserStat(user);
+  //       setUserList(uList);
+  //     } catch (error) {
+  //       console.log("Admin DashBoard Data Fetch Failed", error);
+  //     }
+  //   };
+
+  //   fetchAdminDashboardData();
+  // }, []);
+
   useEffect(() => {
     const fetchAdminDashboardData = async () => {
       const access_token = localStorage.getItem("access_token");
       try {
+        setLoading(true); // start loading
+  
         const [adminStatRes, userStatRes, userListRes] = await Promise.all([
           fetch("http://51.20.246.38:5000/api/admindashboard", {
             method: "GET",
-            // mode: 'no-cors',
-
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${access_token}`,
@@ -70,7 +123,6 @@ const Dashboard = () => {
           }),
           fetch("http://51.20.246.38:5000/api/top_users", {
             method: "GET",
-            // mode: 'no-cors',
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${access_token}`,
@@ -84,23 +136,26 @@ const Dashboard = () => {
             },
           }),
         ]);
-
+  
         const [admin, user, uList] = await Promise.all([
           adminStatRes.json(),
           userStatRes.json(),
           userListRes.json(),
         ]);
-
+  
         setAdminStat(admin);
         setUserStat(user);
         setUserList(uList);
       } catch (error) {
         console.log("Admin DashBoard Data Fetch Failed", error);
+      } finally {
+        setLoading(false); // done loading
       }
     };
-
+  
     fetchAdminDashboardData();
   }, []);
+  
 
   return (
     <>
@@ -306,18 +361,40 @@ const Dashboard = () => {
                     <th scope="col">Pages Completed</th>
                   </tr>
                 </thead>
-                <tbody>
+                {/* <tbody>
                   {userStat.map((data, index) => (
                     <tr key={index}>
-                      <th scope="row">{index + 1}</th>{}
-                      {/* Rank based on index */}
+                      <th scope="row">{index + 1}</th>
+                      {}
                       <td>{data.username}</td>
                       <td>{data.completed_pages}</td>
                       <td>{data.total_time}</td>
                       <td>{data.total_pages - data.pending_pages}</td>
                     </tr>
                   ))}
-                </tbody>
+                </tbody> */}
+                <tbody>
+  {loading ? (
+    <tr>
+      <td colSpan="5" className="text-center">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </td>
+    </tr>
+  ) : (
+    userStat.map((data, index) => (
+      <tr key={index}>
+        <th scope="row">{index + 1}</th>
+        <td>{data.username}</td>
+        <td>{data.completed_pages}</td>
+        <td>{data.total_time}</td>
+        <td>{data.total_pages - data.pending_pages}</td>
+      </tr>
+    ))
+  )}
+</tbody>
+
               </table>
             </div>
           </div>
@@ -378,74 +455,89 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {visibleUsers.map((user, index) => {
-                  const globalIndex = (currentPage - 1) * usersPerPage + index;
+  {loading ? (
+    <tr>
+      <td colSpan="7" className="text-center">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </td>
+    </tr>
+  ) : (
+    visibleUsers.map((user, index) => {
+      const globalIndex = (currentPage - 1) * usersPerPage + index;
 
-                  return (
-                    <React.Fragment key={globalIndex}>
-                      <tr
-                        onClick={() => handleToggleTalbe(globalIndex)}
-                        style={{ cursor: "pointer" }}
-                      >
-                        <th scope="row">
-                          <div className="d-flex align-items-center justify-content-center gap-2 position-relative">
-                            <input type="checkbox" />
-                            <i
-                              className={`fa-solid fa-caret-down arrow-icon ${
-                                expandedRow === globalIndex ? "rotate" : ""
-                              }`}
-                            ></i>
-                            <span>{user.username}</span>
-                          </div>
-                        </th>
-                        <td>{user.pages_assigned}</td>
-                        <td>{user.pages_completed}</td>
-                        <td>{user.time_taken}</td>
-                        <td>{user.avg_time_per_page}</td>
-                        <td>{user.pending_pages}</td>
-                        <td>{user.pdf}</td>
+      return (
+        <React.Fragment key={globalIndex}>
+          <tr
+            onClick={() => handleToggleTalbe(globalIndex)}
+            style={{ cursor: "pointer" }}
+          >
+            <th scope="row">
+              <div className="d-flex align-items-center gap-2 position-relative">
+                <i
+                  className={`fa-solid fa-caret-down arrow-icon ${
+                    expandedRow === globalIndex ? "rotate" : ""
+                  }`}
+                ></i>
+                <span>{user.username}</span>
+              </div>
+            </th>
+            <td>{user.pages_assigned}</td>
+            <td>{user.pages_completed}</td>
+            <td>{user.time_taken}</td>
+            <td>{user.avg_time_per_page}</td>
+            <td>{user.pending_pages}</td>
+            <td>
+              {user.pdf_info?.filter((pdf) => pdf.pages_left === 0).length || 0}
+            </td>
+          </tr>
+
+          {expandedRow === globalIndex && (
+            <tr className="expanded-row inner-table">
+              <td colSpan="7">
+                <div className="inner-table-wrapper">
+                  <table className="table table-bordered inner-table mb-0">
+                    <thead className="table-secondary">
+                      <tr>
+                        <th>PDF</th>
+                        <th>Page Name</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Time Taken</th>
+                        <th>Recording</th>
                       </tr>
-
-                      {expandedRow === globalIndex && (
-                        <tr className="expanded-row inner-table">
-                          <td colSpan="7">
-                            <div className="inner-table-wrapper">
-                              <table className="table table-bordered inner-table mb-0">
-                                <thead className="table-secondary">
-                                  <tr>
-                                    <th>PDF</th>
-                                    <th>Page Name</th>
-                                    <th>Start Time</th>
-                                    <th>End Time</th>
-                                    <th>Time Taken</th>
-                                    <th>Recording</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {user.pdf_info.map((pdf, idx) => (
-                                    <tr key={idx}>
-                                      <td>{pdf.document_name}</td>
-                                      <td>{pdf.pages_left}</td>
-                                      <td>-</td>
-                                      <td>-</td>
-                                      <td>{pdf.total_time}</td>
-                                      <td>
-                                        <button className="btn btn-sm btn-outline-primary">
-                                          View
-                                        </button>
-                                      </td>
-                                    </tr>
-                                  ))}
-                                </tbody>
-                              </table>
-                            </div>
+                    </thead>
+                    <tbody>
+                      {user.pdf_info.map((pdf, idx) => (
+                        <tr key={idx}>
+                          <td>{pdf.document_name}</td>
+                          <td>{pdf.pages_left}</td>
+                          <td>-</td>
+                          <td>-</td>
+                          <td>{pdf.total_time}</td>
+                          <td>
+                            <button
+                              className="btn btn-sm btn-outline-primary"
+                              onClick={() => navigate("/pdf-pages")}
+                            >
+                              View
+                            </button>
                           </td>
                         </tr>
-                      )}
-                    </React.Fragment>
-                  );
-                })}
-              </tbody>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </td>
+            </tr>
+          )}
+        </React.Fragment>
+      );
+    })
+  )}
+</tbody>
+
             </table>
           </div>
 
