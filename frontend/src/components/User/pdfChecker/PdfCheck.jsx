@@ -1,11 +1,15 @@
-import React from "react";
+import React,{useState} from "react";
 import "./pdfcheck.css";
 import pdfImg from "../../../assest/Rectangle.png";
 import { useNavigate } from 'react-router-dom';
 
 
+
 const PdfCheck = () => {
       const navigate = useNavigate();
+
+
+    
   
   const cards = Array.from({ length: 30 });
   return (
@@ -224,6 +228,11 @@ const PdfCheck = () => {
                 <div className="checkerpagetext">
                   <h4>Page {index + 1}</h4>
                 </div>
+                <div className="audio">
+                  
+                  <i class="fa-solid fa-play"></i>
+                </div>
+               
               </div>
             ))}
           </div>
