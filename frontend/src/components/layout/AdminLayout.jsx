@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import './adminLayout.css';
 import logo from "../../assest/Logo.png";
 import active from "../../assest/active.png";
@@ -11,11 +11,17 @@ import profile from "../../assest/profile.png";
 import PdfUploadModal from '../modal/pdfUploadModal/PdfUploadModal';
 
 const AdminLayout = () => {
+  const navigate = useNavigate();
 
   const [showModal, setShowModal] = useState(false);
   
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
+
+  const handleLogout = () => {
+    localStorage.clear(); // or just remove specific keys like removeItem('user_id')
+    navigate('/login');
+  };
 
   return (
     <>
@@ -57,9 +63,12 @@ const AdminLayout = () => {
                   <div className="bell">
                     <img src={notification} alt="" />
                   </div>
-                  <div className="userPhoto">
+                  {/* <div className="userPhoto">
                     <img src={profile} alt="" />
-                  </div>
+                  </div> */}
+                  <div className="userPhoto" onClick={handleLogout} style={{ cursor: 'pointer' }}>
+                  <img src={profile} alt="Profile / Logout" />
+                </div>
                 </div>
               </div>
             </div>
