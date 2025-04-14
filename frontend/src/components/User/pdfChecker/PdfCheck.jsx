@@ -1,14 +1,24 @@
 import React from "react";
 import "./pdfcheck.css";
 import pdfImg from "../../../assest/Rectangle.png";
+import { useNavigate } from 'react-router-dom';
+
 
 const PdfCheck = () => {
+      const navigate = useNavigate();
+  
+  const cards = Array.from({ length: 30 });
   return (
     <>
       <div className="pdfCheckContainer">
         <div className="textEditorTop">
           <div className="textEditorTopLeft">
-            <i class="fa-solid fa-angle-left"></i>
+            {/* <i class="fa-solid fa-angle-left"></i> */}
+            <i
+          className="fa-solid fa-angle-left"
+          style={{ cursor: 'pointer' }}
+          onClick={() => navigate(-1)} // Goes to the previous page
+        ></i>
             <h3>Client_Proposal_April2025.pdf</h3>
           </div>
           <div className="editorTopRightBtn">
@@ -48,7 +58,6 @@ const PdfCheck = () => {
 
         <div className="mainCheckContainer">
           <div className="status">
-
             <div className="ceckerCheckbox">
               <div className="openo">
                 <span className="online"></span>
@@ -59,11 +68,11 @@ const PdfCheck = () => {
               <div className="offlineo">
                 <span className="offline"></span>
               </div>
-                  <h2>Pending</h2>
+              <h2>Pending</h2>
             </div>
           </div>
           <div className="checkContainer">
-            <div className="checkContainerCard">
+            {/* <div className="checkContainerCard">
               <div className="ceckerCheckbox">
                 <div className="open">
                   <span className="online"></span>
@@ -196,7 +205,27 @@ const PdfCheck = () => {
               <div className="checkerpagetext">
                 <h4>Page1</h4>
               </div>
-            </div>
+            </div> */}
+
+            {cards.map((_, index) => (
+              <div className="checkContainerCard" key={index}>
+                <div className="ceckerCheckbox">
+                  <div className={index % 2 === 0 ? "open" : "offline"}>
+                    <span
+                      className={index % 2 === 0 ? "online" : "offline"}
+                    ></span>
+                  </div>
+                </div>
+
+                <div className="checkerPdfImg">
+                  <img src={pdfImg} alt={`PDF Page ${index + 1}`} />
+                </div>
+
+                <div className="checkerpagetext">
+                  <h4>Page {index + 1}</h4>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

@@ -501,7 +501,7 @@ const Dashboard = () => {
                     <thead className="table-secondary">
                       <tr>
                         <th>PDF</th>
-                        <th>Page Name</th>
+                        <th>Number Of Pages</th>
                         <th>Start Time</th>
                         <th>End Time</th>
                         <th>Time Taken</th>

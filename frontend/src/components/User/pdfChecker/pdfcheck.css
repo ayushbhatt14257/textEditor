@@ -116,4 +116,10 @@
     .checkerpagetext {
         text-align: center;
     }
+
+.checkerPdfImg{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}    
     
